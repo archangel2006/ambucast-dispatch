@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// model Ambulance {
+//   id        String   @id @default(cuid())
+//   lat       Float
+//   lng       Float
+//   status    String   // idle | busy
+//   updatedAt DateTime @updatedAt
+// }
+
+model Hotspot {
+  id        String   @id @default(cuid())
+  area      String
+  lat       Float
+  lng       Float
+  risk      String
+  timestamp DateTime
+}
+
+model Prediction {
+  id        String   @id @default(cuid())
+  data      Json
+  createdAt DateTime @default(now())
+}
+
+model Ambulance {
+  id        String   @id @default(cuid())
+  lat       Float
+  lng       Float
+  status    AmbulanceStatus @default(AVAILABLE)
+  zoneId    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum AmbulanceStatus {
+  AVAILABLE
+  BUSY
+  MOVING
+}
