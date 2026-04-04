@@ -1,0 +1,182 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 20% 96%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 199 89% 40%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 20% 91%;
+    --secondary-foreground: 222 47% 20%;
+
+    --muted: 210 15% 93%;
+    --muted-foreground: 215 15% 45%;
+
+    --accent: 210 20% 88%;
+    --accent-foreground: 222 47% 11%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 71% 35%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 45%;
+    --warning-foreground: 0 0% 10%;
+
+    --critical: 0 84% 50%;
+    --critical-foreground: 0 0% 100%;
+
+    --neon-blue: 199 89% 40%;
+    --neon-red: 0 84% 50%;
+    --neon-green: 142 71% 35%;
+    --neon-orange: 38 92% 45%;
+
+    --border: 210 15% 85%;
+    --input: 210 15% 85%;
+    --ring: 199 89% 40%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 210 20% 98%;
+    --sidebar-foreground: 222 47% 20%;
+    --sidebar-primary: 199 89% 40%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 20% 93%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 210 15% 88%;
+    --sidebar-ring: 199 89% 40%;
+  }
+
+  .dark {
+    --background: 222 47% 6%;
+    --foreground: 210 40% 92%;
+
+    --card: 222 44% 9%;
+    --card-foreground: 210 40% 92%;
+
+    --popover: 222 44% 9%;
+    --popover-foreground: 210 40% 92%;
+
+    --primary: 199 89% 48%;
+    --primary-foreground: 222 47% 6%;
+
+    --secondary: 220 40% 14%;
+    --secondary-foreground: 210 40% 85%;
+
+    --muted: 220 30% 15%;
+    --muted-foreground: 215 20% 55%;
+
+    --accent: 220 40% 18%;
+    --accent-foreground: 210 40% 92%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 10%;
+
+    --critical: 0 84% 60%;
+    --critical-foreground: 0 0% 100%;
+
+    --neon-blue: 199 89% 48%;
+    --neon-red: 0 84% 60%;
+    --neon-green: 142 71% 45%;
+    --neon-orange: 38 92% 50%;
+
+    --border: 220 30% 18%;
+    --input: 220 30% 18%;
+    --ring: 199 89% 48%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 222 47% 5%;
+    --sidebar-foreground: 210 40% 85%;
+    --sidebar-primary: 199 89% 48%;
+    --sidebar-primary-foreground: 222 47% 6%;
+    --sidebar-accent: 220 40% 12%;
+    --sidebar-accent-foreground: 210 40% 92%;
+    --sidebar-border: 220 30% 14%;
+    --sidebar-ring: 199 89% 48%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+}
+
+@layer utilities {
+  .glow-blue {
+    box-shadow: 0 0 15px hsl(199 89% 48% / 0.3), 0 0 30px hsl(199 89% 48% / 0.1);
+  }
+  .glow-red {
+    box-shadow: 0 0 15px hsl(0 84% 60% / 0.3), 0 0 30px hsl(0 84% 60% / 0.1);
+  }
+  .glow-green {
+    box-shadow: 0 0 15px hsl(142 71% 45% / 0.3), 0 0 30px hsl(142 71% 45% / 0.1);
+  }
+  .glow-orange {
+    box-shadow: 0 0 15px hsl(38 92% 50% / 0.3), 0 0 30px hsl(38 92% 50% / 0.1);
+  }
+  .text-glow-blue {
+    text-shadow: 0 0 10px hsl(199 89% 48% / 0.5);
+  }
+  .text-glow-red {
+    text-shadow: 0 0 10px hsl(0 84% 60% / 0.5);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes blink-critical {
+  0%, 100% { border-color: hsl(0 84% 60% / 0.8); }
+  50% { border-color: hsl(0 84% 60% / 0.2); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.4s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out forwards;
+}
+
+.animate-blink-critical {
+  animation: blink-critical 1s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
