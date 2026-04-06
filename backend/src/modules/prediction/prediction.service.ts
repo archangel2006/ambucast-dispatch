@@ -1,9 +1,11 @@
 import { Prisma } from "../../generated/prisma/client.js";
 import { prisma } from "../../lib/prisma.js";
 import type { HotspotInput, PredictionInput } from "./prediction.types.js";
+import { getIO } from "../../sockets/socket.js";
 
 export const storePrediction = async (data: PredictionInput) => {
   const { hotspots, timestamp } = data;
+  const io = getIO();
 
   // 1. store raw JSON
   await prisma.prediction.create({
@@ -12,7 +14,7 @@ export const storePrediction = async (data: PredictionInput) => {
     }
   });
 
-  // 2. store hotspots
+  // 2. store hotspots (need to check the properties with the ml and frontend)
   const hotspotEntries = hotspots.map((h: HotspotInput) => ({
     area: h.area,
     lat: h.lat,
@@ -23,6 +25,11 @@ export const storePrediction = async (data: PredictionInput) => {
 
   await prisma.hotspot.createMany({
     data: hotspotEntries
+  });
+
+  io.emit("predictions:new", {
+  hotspots: hotspotEntries,
+  timestamp,
   });
 
   return { message: "Prediction stored successfully" };

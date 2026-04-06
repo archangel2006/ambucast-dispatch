@@ -1,8 +1,9 @@
 import { prisma } from "../../lib/prisma.js";
 import { calculateDistance } from "../../utils/distance.js";
-
+import { getIO } from "../../sockets/socket.js";
 
 export const runAllocation = async () => {
+    const io = getIO();
     const riskPriority: Record<string, number> = {
     high: 3,
     medium: 2,
@@ -55,7 +56,10 @@ export const runAllocation = async () => {
             distance: minDistance,
         });
         }
-    }
+    };
+    io.emit("allocation:updated", {
+        assignments,
+    });
 
     return assignments;
 };
