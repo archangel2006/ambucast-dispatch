@@ -1,8 +1,83 @@
+# Run the backend:
+
+1. npm i
+2. add a .env and your DATABASE_URL="your_postgres_url"
+3. npx prisma generate
+4. npx prisma db push
+5. npm run dev
+
+## Mental Notes:
+
+Right now, we are seeding data, as:
+Allocation needs ambulances.
+Hotspots come from predictions.
+And we need to test emit.
+
+
+# Testing Endpoints:
+
+Right now, through curl:
+
+1. seed ambulances: curl http://localhost:3000/api/ambulances/seed
+   response: {"msg":"ambulances seeded"}
+2. return ambulances: curl http://localhost:3000/api/ambulances
+   response: [
+  {
+    "id": "cmnn2ei1i0000zyv5pry8a48m",
+    "lat": 28.7041,
+    "lng": 77.1025,
+    "status": "AVAILABLE",
+    "zoneId": null,
+    "createdAt": "2026-04-06T10:46:01.686Z",
+    "updatedAt": "2026-04-06T10:46:01.686Z"
+  },
+  {
+    "id": "cmnn2eldg0001zyv5fe9ptw57",
+    "lat": 28.5355,
+    "lng": 77.391,
+    "status": "AVAILABLE",
+    "zoneId": null,
+    "createdAt": "2026-04-06T10:46:06.004Z",
+    "updatedAt": "2026-04-06T10:46:06.004Z"
+  }]
+
+3. seed predictions: 
+curl -X POST http://localhost:3000/api/predictions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "timestamp": "2026-03-22T18:00:00Z",
+    "hotspots": [
+      {"area": "Rohini", "lat": 28.7, "lng": 77.1, "risk": "high"},
+      {"area": "Saket", "lat": 28.5, "lng": 77.2, "risk": "medium"}
+    ]
+  }'
+
+4. curl http://localhost:3000/api/hotspots  
+
+4. curl -X POST http://localhost:3000/api/ambulances/move \
+-H "Content-Type: application/json" \
+-d '{
+  "id": "cmniprfmg00001wv5dws5ra0l",
+  "lat": 28.70,
+  "lng": 77.10
+}'
+
+5. curl -X POST http://localhost:3000/api/allocation/run
+expected output: [
+  {
+    "ambulanceId": "cmniprfmg00001wv5dws5ra0l",
+    "hotspot": "Rohini",
+    "distance": 2.1
+  }
+]
+6. 
+
+
 ## /api/ambulances/seed - (dummy data seeding)
 response: {
   "msg": "ambulances seeded"
 }
-## /api/ambulances :
+## GET /api/ambulances :
 response:
 [
   {
@@ -92,3 +167,6 @@ response:
 ]
 
 We prioritize hotspots by risk, then greedily assign the nearest available ambulance to each hotspot using distance calculation, ensuring no ambulance is reused.
+
+
+
