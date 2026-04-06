@@ -3,6 +3,7 @@ import { prisma } from "../../lib/prisma.js";
 import type { Request, Response } from "express";
 
 export const createPrediction = async (req: Request, res: Response) => {
+  console.log("🔥 HIT createPrediction"); 
   try {
     const result = await storePrediction(req.body);
     res.status(200).json(result);
