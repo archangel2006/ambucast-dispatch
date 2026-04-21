@@ -1,0 +1,86 @@
+{
+  "Z01": {
+    "name": "Connaught Place",
+    "lat": 28.6315,
+    "lng": 77.2167,
+    "population_density": 28000,
+    "elderly_pct": 0.12
+  },
+  "Z02": {
+    "name": "Karol Bagh",
+    "lat": 28.6510,
+    "lng": 77.1900,
+    "population_density": 32000,
+    "elderly_pct": 0.14
+  },
+  "Z03": {
+    "name": "Chandni Chowk",
+    "lat": 28.6562,
+    "lng": 77.2303,
+    "population_density": 35000,
+    "elderly_pct": 0.13
+  },
+  "Z04": {
+    "name": "Dwarka",
+    "lat": 28.5921,
+    "lng": 77.0460,
+    "population_density": 15000,
+    "elderly_pct": 0.18
+  },
+  "Z05": {
+    "name": "Saket",
+    "lat": 28.5245,
+    "lng": 77.2066,
+    "population_density": 18000,
+    "elderly_pct": 0.16
+  },
+  "Z06": {
+    "name": "Rohini",
+    "lat": 28.7495,
+    "lng": 77.0565,
+    "population_density": 20000,
+    "elderly_pct": 0.17
+  },
+  "Z07": {
+    "name": "Lajpat Nagar",
+    "lat": 28.5677,
+    "lng": 77.2430,
+    "population_density": 26000,
+    "elderly_pct": 0.15
+  },
+  "Z08": {
+    "name": "Janakpuri",
+    "lat": 28.6219,
+    "lng": 77.0878,
+    "population_density": 22000,
+    "elderly_pct": 0.19
+  },
+  "Z09": {
+    "name": "Pitampura",
+    "lat": 28.6984,
+    "lng": 77.1310,
+    "population_density": 24000,
+    "elderly_pct": 0.18
+  },
+  "Z10": {
+    "name": "Nehru Place",
+    "lat": 28.5494,
+    "lng": 77.2519,
+    "population_density": 27000,
+    "elderly_pct": 0.13
+  },
+  "Z11": {
+    "name": "Mayur Vihar",
+    "lat": 28.6069,
+    "lng": 77.2942,
+    "population_density": 23000,
+    "elderly_pct": 0.16
+  },
+  "Z12": {
+    "name": "Vasant Kunj",
+    "lat": 28.5244,
+    "lng": 77.1587,
+    "population_density": 14000,
+    "elderly_pct": 0.20
+  }
+}
