@@ -169,4 +169,3 @@ response:
 We prioritize hotspots by risk, then greedily assign the nearest available ambulance to each hotspot using distance calculation, ensuring no ambulance is reused.
 
 
-
