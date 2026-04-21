@@ -1,7 +1,5 @@
 export const getTimeData = () => {
   const now = new Date();
-      console.log("3")
-
 
   return {
     hour: now.getHours(),

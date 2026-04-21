@@ -4,7 +4,6 @@ import { getTimeData } from "./timeService.js";
 
 export const buildZonePayloads = async () => {
     const time = getTimeData();
-        console.log("2")
 
     const entries = Object.entries(zones);
 
