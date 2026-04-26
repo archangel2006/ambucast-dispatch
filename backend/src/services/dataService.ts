@@ -1,5 +1,10 @@
 const API_KEY = process.env.OPENWEATHER_API_KEY;
 
+const mapAQI = (aqi: number) => {
+  const mapping = [50, 100, 150, 200, 300];
+  return mapping[aqi - 1] || 100;
+};
+
 export const getAirData = async (lat: number, lng: number) => {
         const res = await fetch(
             `https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lng}&appid=${API_KEY}`
@@ -16,7 +21,7 @@ export const getAirData = async (lat: number, lng: number) => {
         console.log("air data",data);
 
         return {
-            aqi: data.list[0].main.aqi,
+            aqi: mapAQI(data.list[0].main.aqi),
             pm25: data.list[0].components.pm2_5,
             pm10: data.list[0].components.pm10
         };
