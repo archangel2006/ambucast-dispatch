@@ -1,8 +1,8 @@
-
+## 🔁 Pipeline Flow
 
 ```bash
 
-Client / API Call (/api/pipeline)
+Client / API Call (GET /api/pipeline)
         ↓
 Node Backend (pipeline.ts)
         ↓
@@ -14,11 +14,11 @@ Fetch External APIs
         ↓
 Add Time Features (hour, day_of_week)
         ↓
-Construct ML Input Payload
+Construct ML Input Payload (per zone)
         ↓
 Call FastAPI (/predict-batch)
         ↓
-ML Processing
+FastAPI ML Processing
    ├── Hotspot Model (XGBoost)
    └── Risk Model (Rule Engine)
         ↓
@@ -39,17 +39,34 @@ Used by:
 
 ## 🔁 End-to-End Test
 
-### 1. Start FastAPI
+### 1️⃣ Start FastAPI
 ```
+cd ml_api
 uvicorn main:app --reload
 ```
+Runs on: http://localhost:8000
 
-2. Start Backend
+
+### 2️⃣ Start Backend
 ```
+cd backend
+npm install
 npm run dev
 ```
+Runs on: http://localhost:3001
 
-3. Call pipeline
+
+### 3️⃣ Call pipeline
 ```
 curl http://localhost:3001/api/pipeline
 ```
+
+### 4️⃣ Expected Behavior
+- Fetches live air + weather data
+- Builds zone-wise ML input
+- Calls FastAPI /predict-batch
+- Returns enriched zones with:
+    - predicted_calls
+    - risk_score
+    - risk_class
+    - reasons
