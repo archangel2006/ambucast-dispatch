@@ -18,6 +18,9 @@ interface AppStore {
 
   selectedZone: string | null;
   setSelectedZone: (zone: string | null) => void;
+
+  autoFetchEnabled: boolean;
+  setAutoFetchEnabled: (enabled: boolean) => void;
 }
 
 export const useAppStore = create<AppStore>((set) => ({
@@ -43,4 +46,7 @@ export const useAppStore = create<AppStore>((set) => ({
 
   selectedZone: null,
   setSelectedZone: (zone) => set({ selectedZone: zone }),
+
+  autoFetchEnabled: true,
+  setAutoFetchEnabled: (enabled) => set({ autoFetchEnabled: enabled }),
 }));

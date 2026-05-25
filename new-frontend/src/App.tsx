@@ -8,15 +8,17 @@ import HotspotsPage from '@/pages/Hotspots';
 import FleetPage from '@/pages/Fleet';
 import RiskPage from '@/pages/Risk';
 import AnalyticsPage from '@/pages/Analytics';
-import SettingsPage from '@/pages/Settings';
+import SettingsPage from '@/pages/SettingsPage';
 import NotFound from '@/pages/NotFound';
 import './index.css';
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 30000,
-      gcTime: 10 * 60 * 1000,
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      gcTime: 30 * 60 * 1000, // 30 minutes
+      refetchOnWindowFocus: false, // Don't refetch when window regains focus
+      retry: 1, // Retry failed requests once
     },
   },
 });
