@@ -25,7 +25,7 @@ export const ambulanceAPI = {
 // Prediction & Hotspot APIs
 export const predictionAPI = {
   createPrediction: (data: any) => apiClient.post('/predictions', data),
-  getHotspots: () => apiClient.get('/hotspots'),
+  getHotspots: () => apiClient.get('/pipeline'),
 };
 
 // Allocation APIs

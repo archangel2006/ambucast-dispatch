@@ -30,16 +30,16 @@ export const LiveMap: React.FC<LiveMapProps> = ({
       {ambulances.map((ambulance) => (
         <Marker
           key={ambulance.id}
-          position={[ambulance.location.lat, ambulance.location.lng]}
+          position={[ambulance.lat, ambulance.lng]}
           icon={ambulanceIcon}
         >
           <Popup>
             <div className="text-sm">
-              <p className="font-semibold">{ambulance.name}</p>
+              <p className="font-semibold">{ambulance.name || `AMB-${ambulance.id?.slice(0, 6)}`}</p>
               <p className="text-xs text-gray-600">Status: {ambulance.status}</p>
-              <p className="text-xs text-gray-600">Zone: {ambulance.zone || 'N/A'}</p>
+              <p className="text-xs text-gray-600">Zone: {ambulance.zoneId || ambulance.zone || 'N/A'}</p>
               <p className="text-xs text-gray-600">
-                {ambulance.location.lat.toFixed(4)}, {ambulance.location.lng.toFixed(4)}
+                {(ambulance.lat || 0).toFixed(4)}, {(ambulance.lng || 0).toFixed(4)}
               </p>
             </div>
           </Popup>

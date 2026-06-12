@@ -10,9 +10,9 @@ export const FleetPage: React.FC = () => {
   const { data: ambulances = [] } = useAmbulances();
 
   const statusCounts = {
-    available: (ambulances || []).filter((a: Ambulance) => a.status === 'available').length,
-    occupied: (ambulances || []).filter((a: Ambulance) => a.status === 'occupied').length,
-    maintenance: (ambulances || []).filter((a: Ambulance) => a.status === 'maintenance').length,
+    available: (ambulances || []).filter((a: Ambulance) => a.status?.toUpperCase() === 'AVAILABLE').length,
+    occupied: (ambulances || []).filter((a: Ambulance) => a.status?.toUpperCase() === 'OCCUPIED').length,
+    maintenance: (ambulances || []).filter((a: Ambulance) => a.status?.toUpperCase() === 'MAINTENANCE').length,
   };
 
   const pieData = [

@@ -1,7 +1,15 @@
 import zones from "../data/zones.json" with { type: "json" };
 import { getAirData, getWeatherData } from "./dataService.js";
 import { getTimeData } from "./timeService.js";
-import { getPredictions } from "./mlService.js";  
+import { getPredictions } from "./mlService.js";
+import { getIO } from "../sockets/socket.js";
+
+const normalizeRiskClass = (risk: string | undefined) => {
+  const normalized = String(risk || 'low').trim().toLowerCase();
+  return ['critical', 'high', 'moderate', 'medium', 'low'].includes(normalized)
+    ? normalized
+    : 'low';
+};
 
 export const buildZonePayloads = async () => {
     const time = getTimeData();
@@ -37,16 +45,27 @@ export const buildZonePayloads = async () => {
         // Step 3: Merge predictions with zone data ← ADD THIS BLOCK
         const enrichedResults = results.map(zone => {
             const prediction = predictions.find(p => p.zone_id === zone.zone_id);
-            return {
+            const result = {
                 ...zone,
                 ...(prediction || {
                     predicted_calls: 0,
                     risk_score: 0,
-                    risk_class: "LOW",
+                    risk_class: "low",
                     reasons: ["No prediction available"]
                 })
             };
+
+            return {
+                ...result,
+                risk_class: normalizeRiskClass(result.risk_class),
+            };
         });
+
+        try {
+          getIO().emit("pipeline:updated", enrichedResults);
+        } catch (emitError: any) {
+          console.warn("Socket.IO not ready for pipeline update event:", emitError?.message || emitError);
+        }
 
         console.log("Pipeline complete with predictions");
         return enrichedResults;

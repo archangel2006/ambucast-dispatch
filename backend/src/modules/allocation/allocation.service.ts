@@ -5,13 +5,19 @@ import { getIO } from "../../sockets/socket.js";
 export const runAllocation = async () => {
     const io = getIO();
     const riskPriority: Record<string, number> = {
-    high: 3,
-    medium: 2,
-    low: 1,
+      critical: 4,
+      high: 3,
+      moderate: 2,
+      medium: 2,
+      low: 1,
     };
     // const hotspots = await prisma.hotspot.findMany();
     const hotspots = (await prisma.hotspot.findMany()).sort(
-    (a, b) => (riskPriority[b.risk] ?? 0) - (riskPriority[a.risk] ?? 0)
+      (a, b) => {
+        const aRisk = String(a.risk_class || 'low').toLowerCase();
+        const bRisk = String(b.risk_class || 'low').toLowerCase();
+        return (riskPriority[bRisk] ?? 0) - (riskPriority[aRisk] ?? 0);
+      }
     );
     const ambulances = await prisma.ambulance.findMany({
         where: { status: "AVAILABLE" },

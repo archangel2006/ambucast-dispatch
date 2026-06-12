@@ -27,19 +27,19 @@ export const useAmbulances = () => {
       queryClient.invalidateQueries({ queryKey: ['ambulances'] });
     };
 
-    socket.on('ambulance_moved', onAmbulanceUpdate);
-    socket.on('ambulance_status_changed', onAmbulanceUpdate);
+    socket.on('ambulance:moved', onAmbulanceUpdate);
+    socket.on('ambulance:status', onAmbulanceUpdate);
 
     return () => {
-      socket.off('ambulance_moved', onAmbulanceUpdate);
-      socket.off('ambulance_status_changed', onAmbulanceUpdate);
+      socket.off('ambulance:moved', onAmbulanceUpdate);
+      socket.off('ambulance:status', onAmbulanceUpdate);
     };
   }, [queryClient]);
 
   return query;
 };
 
-// Auto-fetch hotspots with 12 min intervals + automatic batch ML predictions
+// Auto-fetch hotspots with 12 min intervals using the backend pipeline
 export const useHotspots = () => {
   const setHotspots = useAppStore((state) => state.setHotspots);
   const autoFetchEnabled = useAppStore((state) => state.autoFetchEnabled);
@@ -51,11 +51,6 @@ export const useHotspots = () => {
       try {
         const response = await predictionAPI.getHotspots();
         setHotspots(response.data);
-        
-        // Automatically trigger batch predictions every time we fetch
-        // This happens in the background without user interaction
-        triggerAutoMLPredictions();
-        
         return response.data;
       } catch (error) {
         console.error('Failed to fetch hotspots:', error);
@@ -73,50 +68,16 @@ export const useHotspots = () => {
       queryClient.invalidateQueries({ queryKey: ['hotspots'] });
     };
 
-    socket.on('hotspot_updated', onHotspotUpdate);
-    socket.on('prediction_completed', onHotspotUpdate);
+    socket.on('pipeline:updated', onHotspotUpdate);
+    socket.on('predictions:new', onHotspotUpdate);
 
     return () => {
-      socket.off('hotspot_updated', onHotspotUpdate);
-      socket.off('prediction_completed', onHotspotUpdate);
+      socket.off('pipeline:updated', onHotspotUpdate);
+      socket.off('predictions:new', onHotspotUpdate);
     };
   }, [queryClient]);
 
   return query;
-};
-
-// Automatic ML batch predictions - runs in background
-const triggerAutoMLPredictions = async () => {
-  try {
-    // Get all ambulances to determine zones to predict
-    const ambulancesResponse = await ambulanceAPI.fetchAll();
-    const zones = new Set(ambulancesResponse.data?.map((a: any) => a.zone) || []);
-
-    if (zones.size === 0) return;
-
-    // Prepare batch prediction data for all zones
-    const batchData = Array.from(zones).map((zone: any) => ({
-      zone_id: zone,
-      aqi: Math.random() * 300, // Would come from actual sensor data
-      pm25: Math.random() * 200,
-      pm10: Math.random() * 300,
-      temperature: 20 + Math.random() * 15,
-      humidity: 40 + Math.random() * 40,
-      hour: new Date().getHours(),
-      day_of_week: new Date().getDay(),
-      population_density: 5000 + Math.random() * 20000,
-      elderly_pct: 0.1 + Math.random() * 0.3,
-    }));
-
-    // Run batch predictions automatically (fire and forget)
-    if (batchData.length > 0) {
-      mlAPI.predictBatch(batchData).catch((err) => {
-        console.warn('Batch prediction error (non-critical):', err.message);
-      });
-    }
-  } catch (error) {
-    console.warn('Auto-prediction setup failed:', error);
-  }
 };
 
 // Automatic allocation runs - triggered periodically

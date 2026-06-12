@@ -56,9 +56,9 @@ export const LiveMapPage: React.FC = () => {
                       : 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700'
                   }`}
                 >
-                  <p className="font-semibold text-sm">{amb.name}</p>
+                  <p className="font-semibold text-sm">{amb.name || `AMB-${amb.id?.slice(0, 6)}`}</p>
                   <p className="text-xs text-slate-600 dark:text-slate-400">
-                    {amb.status} • {amb.zone}
+                    {amb.status} • {amb.zoneId || amb.zone || 'No zone assigned'}
                   </p>
                 </div>
               ))}
@@ -77,15 +77,15 @@ export const LiveMapPage: React.FC = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-600">Zone</span>
-                  <span className="font-semibold">{selectedAmbulance.zone || 'N/A'}</span>
+                  <span className="font-semibold">{selectedAmbulance.zoneId || selectedAmbulance.zone || 'N/A'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-600">Latitude</span>
-                  <span className="font-mono text-xs">{selectedAmbulance.location.lat.toFixed(6)}</span>
+                  <span className="text-mono text-xs">{(selectedAmbulance.lat || 0).toFixed(6)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-600">Longitude</span>
-                  <span className="font-mono text-xs">{selectedAmbulance.location.lng.toFixed(6)}</span>
+                  <span className="text-mono text-xs">{(selectedAmbulance.lng || 0).toFixed(6)}</span>
                 </div>
               </CardContent>
             </Card>

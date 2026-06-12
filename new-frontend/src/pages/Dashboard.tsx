@@ -22,9 +22,9 @@ export const Dashboard: React.FC = () => {
 
   const stats = {
     totalAmbulances: ambulances?.length || 0,
-    available: ambulances?.filter((a: Ambulance) => a.status === 'available').length || 0,
-    occupied: ambulances?.filter((a: Ambulance) => a.status === 'occupied').length || 0,
-    maintenance: ambulances?.filter((a: Ambulance) => a.status === 'maintenance').length || 0,
+    available: ambulances?.filter((a: Ambulance) => a.status?.toUpperCase() === 'AVAILABLE').length || 0,
+    occupied: ambulances?.filter((a: Ambulance) => a.status?.toUpperCase() === 'OCCUPIED').length || 0,
+    maintenance: ambulances?.filter((a: Ambulance) => a.status?.toUpperCase() === 'MAINTENANCE').length || 0,
     criticalZones: hotspots?.filter((h: Hotspot) => h.risk_class === 'critical').length || 0,
     activeIncidents: hotspots?.filter((h: Hotspot) => h.predicted_calls > 5).length || 0,
   };

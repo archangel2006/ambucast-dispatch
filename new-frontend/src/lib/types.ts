@@ -1,12 +1,11 @@
 export interface Ambulance {
   id: string;
-  name: string;
-  status: 'available' | 'occupied' | 'maintenance';
-  location: {
-    lat: number;
-    lng: number;
-  };
-  zone?: string;
+  lat: number;
+  lng: number;
+  status: 'AVAILABLE' | 'OCCUPIED' | 'MAINTENANCE' | 'available' | 'occupied' | 'maintenance';
+  zoneId?: string | null;
+  zone?: string; // alias for zoneId for display
+  name?: string; // fallback display name
   createdAt?: string;
   updatedAt?: string;
 }
@@ -14,7 +13,9 @@ export interface Ambulance {
 export interface Hotspot {
   id: string;
   zone_id: string;
-  location: {
+  lat?: number;
+  lng?: number;
+  location?: {
     lat: number;
     lng: number;
   };
@@ -52,7 +53,9 @@ export interface DashboardStats {
 export interface ZoneData {
   zone_id: string;
   name: string;
-  location: {
+  lat?: number;
+  lng?: number;
+  location?: {
     lat: number;
     lng: number;
   };
