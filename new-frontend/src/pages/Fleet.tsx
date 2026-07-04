@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/Card';
 import { AmbulanceCard } from '@/components/AmbulanceCard';
-import { Truck, AlertTriangle } from 'lucide-react';
+import { Truck } from 'lucide-react';
 import { useAmbulances } from '@/hooks/useData';
 import { Ambulance } from '@/lib/types';
 import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts';
@@ -11,12 +11,14 @@ export const FleetPage: React.FC = () => {
 
   const statusCounts = {
     available: (ambulances || []).filter((a: Ambulance) => a.status?.toUpperCase() === 'AVAILABLE').length,
+    moving: (ambulances || []).filter((a: Ambulance) => a.status?.toUpperCase() === 'MOVING').length,
     occupied: (ambulances || []).filter((a: Ambulance) => a.status?.toUpperCase() === 'OCCUPIED').length,
     maintenance: (ambulances || []).filter((a: Ambulance) => a.status?.toUpperCase() === 'MAINTENANCE').length,
   };
 
   const pieData = [
     { name: 'Available', value: statusCounts.available, fill: '#22c55e' },
+    { name: 'Moving', value: statusCounts.moving, fill: '#3b82f6' },
     { name: 'Occupied', value: statusCounts.occupied, fill: '#ef4444' },
     { name: 'Maintenance', value: statusCounts.maintenance, fill: '#eab308' },
   ];
@@ -34,9 +36,10 @@ export const FleetPage: React.FC = () => {
       </div>
 
       {/* Status Overview */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-4 gap-4">
         {[
           { label: 'Available', value: statusCounts.available, color: 'bg-green-100 text-green-800' },
+          { label: 'En Route', value: statusCounts.moving, color: 'bg-blue-100 text-blue-800' },
           { label: 'Occupied', value: statusCounts.occupied, color: 'bg-red-100 text-red-800' },
           { label: 'Maintenance', value: statusCounts.maintenance, color: 'bg-yellow-100 text-yellow-800' },
         ].map((stat) => (

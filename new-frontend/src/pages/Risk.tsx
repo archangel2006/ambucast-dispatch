@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { AlertTriangle, TrendingUp, Activity } from 'lucide-react';
 import { useHotspots } from '@/hooks/useData';
 import { Hotspot } from '@/lib/types';
+import { getZoneDisplayName } from '@/lib/utils';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area } from 'recharts';
 
 export const RiskPage: React.FC = () => {
@@ -13,7 +14,7 @@ export const RiskPage: React.FC = () => {
   const totalPredictedCalls = (hotspots || []).reduce((sum: number, h: Hotspot) => sum + h.predicted_calls, 0);
 
   const timeSeriesData = (hotspots || []).slice(0, 10).map((h: Hotspot, idx: number) => ({
-    time: `Zone ${h.zone_id}`,
+    time: h.area || h.zone_name || getZoneDisplayName(h.zone_id),
     risk: parseFloat(h.risk_score.toFixed(2)),
     calls: h.predicted_calls,
   }));
@@ -44,7 +45,7 @@ export const RiskPage: React.FC = () => {
             ⚠️ {criticalZones.length} Critical Zone(s) Detected
           </h3>
           <p className="mt-1 text-sm text-red-800 dark:text-red-200">
-            Immediate action required for: {criticalZones.map((z: Hotspot) => `Zone ${z.zone_id}`).join(', ')}
+            Immediate action required for: {criticalZones.map((z: Hotspot) => z.area || z.zone_name || getZoneDisplayName(z.zone_id)).join(', ')}
           </p>
         </div>
       )}
@@ -163,7 +164,7 @@ export const RiskPage: React.FC = () => {
               <tbody>
                 {(hotspots || []).slice(0, 10).map((hotspot: Hotspot) => (
                   <tr key={hotspot.id} className="border-b border-slate-100 dark:border-slate-800">
-                    <td className="px-4 py-3">Zone {hotspot.zone_id}</td>
+                    <td className="px-4 py-3">{hotspot.area || hotspot.zone_name || getZoneDisplayName(hotspot.zone_id)}</td>
                     <td className="px-4 py-3">
                       <span
                         className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${

@@ -1,6 +1,6 @@
-version: '3.8'
 
 services:
+  # ─── PostgreSQL Database ───────────────────────────────────────────────────
   postgres:
     image: postgres:14-alpine
     container_name: ambucast-postgres
@@ -17,6 +17,60 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  # ─── ML API (FastAPI / Python) ─────────────────────────────────────────────
+  ml_api:
+    build:
+      context: ./ml_api
+      dockerfile: Dockerfile
+    container_name: ambucast-ml-api
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000,http://localhost:3001
+    restart: unless-stopped
+
+  # ─── Backend (Node.js / Express) ───────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: ambucast-backend
+    ports:
+      - "3001:3001"
+    environment:
+      # 'postgres' is the service name above — Docker resolves it as a hostname
+      DATABASE_URL: postgresql://user:password@postgres:5432/ambucast_db
+      ML_API_URL: http://ml_api:8000
+      ML_API_ENABLED: "true"
+      ML_API_TIMEOUT: "10000"
+      OPENWEATHER_API_KEY: ${OPENWEATHER_API_KEY}
+      PORT: "3001"
+      NODE_ENV: production
+      CORS_ORIGIN: http://localhost:5173,http://localhost:3000
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ml_api:
+        condition: service_started
+    restart: unless-stopped
+
+  # ─── Frontend (React / Vite → nginx) ──────────────────────────────────────
+  frontend:
+    build:
+      context: ./new-frontend
+      dockerfile: Dockerfile
+    container_name: ambucast-frontend
+    ports:
+      - "3000:80"
+    environment:
+      - VITE_API_URL=http://localhost:3001/api
+      - VITE_ML_API_URL=http://localhost:8000
+      - VITE_SOCKET_URL=http://localhost:3001
+    depends_on:
+      - backend
+    restart: unless-stopped
 
 volumes:
   postgres_data:

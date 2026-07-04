@@ -1,6 +1,6 @@
 import React from 'react';
 import { Ambulance } from '@/lib/types';
-import { getStatusColor } from '@/lib/utils';
+import { getStatusColor, getZoneDisplayName } from '@/lib/utils';
 import { Activity, MapPin } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from './Card';
 
@@ -22,7 +22,7 @@ export const AmbulanceCard: React.FC<AmbulanceCardProps> = ({ ambulance, onClick
     <CardContent className="space-y-2">
       <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
         <MapPin className="h-4 w-4" />
-        <span>{ambulance.zoneId || ambulance.zone || 'No zone assigned'}</span>
+        <span>{getZoneDisplayName(ambulance.zoneId || ambulance.zone, 'No zone assigned')}</span>
       </div>
       <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
         <Activity className="h-4 w-4" />

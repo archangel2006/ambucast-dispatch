@@ -1,5 +1,6 @@
 import React from 'react';
 import { Hotspot } from '@/lib/types';
+import { getZoneDisplayName } from '@/lib/utils';
 import { TrendingUp, AlertCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from './Card';
 
@@ -27,7 +28,7 @@ export const HotspotCard: React.FC<HotspotCardProps> = ({ hotspot, onClick }) =>
   <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={onClick}>
     <CardHeader className="pb-3">
       <div className="flex items-start justify-between">
-        <CardTitle className="text-base">Zone {hotspot.zone_id}</CardTitle>
+        <CardTitle className="text-base">{hotspot.area || hotspot.zone_name || getZoneDisplayName(hotspot.zone_id)}</CardTitle>
         <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${getRiskBgColor(hotspot.risk_class)}`}>
           {hotspot.risk_class?.toUpperCase()}
         </span>

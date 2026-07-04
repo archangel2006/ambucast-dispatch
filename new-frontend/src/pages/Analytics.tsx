@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { BarChart3, TrendingUp } from 'lucide-react';
 import { useAmbulances, useHotspots } from '@/hooks/useData';
 import { Ambulance, Hotspot } from '@/lib/types';
+import { getZoneDisplayName } from '@/lib/utils';
 import { ComposedChart, Bar, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 export const AnalyticsPage: React.FC = () => {
@@ -10,7 +11,7 @@ export const AnalyticsPage: React.FC = () => {
   const { data: hotspots = [] } = useHotspots();
 
   const analyticsData = (hotspots || []).slice(0, 15).map((h: Hotspot) => ({
-    zone: `Z${h.zone_id}`,
+    zone: h.area || h.zone_name || getZoneDisplayName(h.zone_id),
     calls: h.predicted_calls,
     risk: h.risk_score,
     ambulances: ambulances?.filter((a: Ambulance) => a.zone === h.zone_id).length || 0,
@@ -52,7 +53,7 @@ export const AnalyticsPage: React.FC = () => {
             <CardTitle className="text-sm font-medium">Highest Demand Zone</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">Zone {zoneMetrics.highestDemand?.zone_id}</div>
+            <div className="text-3xl font-bold">{zoneMetrics.highestDemand?.area || zoneMetrics.highestDemand?.zone_name || getZoneDisplayName(zoneMetrics.highestDemand?.zone_id)}</div>
             <p className="text-xs text-slate-500 mt-1">{zoneMetrics.highestDemand?.predicted_calls} predicted calls</p>
           </CardContent>
         </Card>
@@ -62,7 +63,7 @@ export const AnalyticsPage: React.FC = () => {
             <CardTitle className="text-sm font-medium">Highest Risk Zone</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">Zone {zoneMetrics.highestRisk?.zone_id}</div>
+            <div className="text-3xl font-bold">{zoneMetrics.highestRisk?.area || zoneMetrics.highestRisk?.zone_name || getZoneDisplayName(zoneMetrics.highestRisk?.zone_id)}</div>
             <p className="text-xs text-slate-500 mt-1">Risk: {zoneMetrics.highestRisk?.risk_score.toFixed(2)}</p>
           </CardContent>
         </Card>
@@ -112,7 +113,7 @@ export const AnalyticsPage: React.FC = () => {
               <span className="text-sm text-slate-600">Fleet Utilization</span>
               <span className="font-semibold">
                 {Math.round(
-                  (ambulances?.filter((a: Ambulance) => a.status === 'occupied').length / (ambulances?.length || 1)) * 100
+                  (ambulances?.filter((a: Ambulance) => a.status?.toUpperCase() === 'OCCUPIED').length / (ambulances?.length || 1)) * 100
                 )}%
               </span>
             </div>
@@ -154,7 +155,7 @@ export const AnalyticsPage: React.FC = () => {
             <div className="flex justify-between items-center">
               <span className="text-sm text-slate-600">Available Ambulances</span>
               <span className="font-semibold text-green-600">
-                {ambulances?.filter((a: Ambulance) => a.status === 'available').length || 0}
+                {ambulances?.filter((a: Ambulance) => a.status?.toUpperCase() === 'AVAILABLE').length || 0}
               </span>
             </div>
             <div className="flex justify-between items-center">

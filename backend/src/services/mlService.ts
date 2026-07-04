@@ -27,8 +27,11 @@ const normalizeRiskClass = (risk: string | undefined) => {
   const normalized = String(risk || 'low').trim().toLowerCase();
   switch (normalized) {
     case 'critical':
+      return 'critical' as PredictionResult['risk_class'];
     case 'high':
+      return 'high' as PredictionResult['risk_class'];
     case 'moderate':
+    case 'medium':
       return 'medium' as PredictionResult['risk_class'];
     case 'low':
       return 'low';

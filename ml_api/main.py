@@ -5,14 +5,28 @@ from inference.riskpulse import calculate_risk
 from schemas.input_schema import HotspotInput, PredictionResult
 import numpy as np
 from typing import List
+import os
 
-app = FastAPI()
+app = FastAPI(title="AmbuCast ML API", version="1.0.0")
 
-# Enable CORS for frontend
+# CORS — reads from ALLOWED_ORIGINS env var (comma-separated) in production
+# Falls back to localhost URLs for local development
+_env_origins = os.getenv("ALLOWED_ORIGINS", "")
+_extra_origins = [o.strip() for o in _env_origins.split(",") if o.strip()]
+
+allowed_origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:5174",
+    "http://127.0.0.1:5174",
+    "http://localhost:3001",
+    "http://localhost:3000",
+] + _extra_origins
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3001"],
-    allow_credentials=True,
+    allow_origins=allowed_origins,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )

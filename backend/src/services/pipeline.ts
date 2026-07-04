@@ -25,6 +25,8 @@ export const buildZonePayloads = async () => {
 
             return {
                 zone_id,
+                area: zone.name,
+                zone_name: zone.name,
                 ...air,
                 ...weather,
                 ...time,

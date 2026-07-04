@@ -2,6 +2,7 @@ import React from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { Ambulance } from '@/lib/types';
+import { getZoneDisplayName } from '@/lib/utils';
 
 const ambulanceIcon = L.icon({
   iconUrl: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSIxNCIgZmlsbD0iIzMzNjZjYyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIiLz48cGF0aCBkPSJNMTYgOHY4TTEyIDE0aDhtLTIgOGgyIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+',
@@ -37,7 +38,7 @@ export const LiveMap: React.FC<LiveMapProps> = ({
             <div className="text-sm">
               <p className="font-semibold">{ambulance.name || `AMB-${ambulance.id?.slice(0, 6)}`}</p>
               <p className="text-xs text-gray-600">Status: {ambulance.status}</p>
-              <p className="text-xs text-gray-600">Zone: {ambulance.zoneId || ambulance.zone || 'N/A'}</p>
+              <p className="text-xs text-gray-600">Zone: {getZoneDisplayName(ambulance.zoneId || ambulance.zone, 'N/A')}</p>
               <p className="text-xs text-gray-600">
                 {(ambulance.lat || 0).toFixed(4)}, {(ambulance.lng || 0).toFixed(4)}
               </p>

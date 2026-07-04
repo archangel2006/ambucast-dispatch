@@ -4,6 +4,7 @@ import { HotspotCard } from '@/components/HotspotCard';
 import { Zap, Filter } from 'lucide-react';
 import { useHotspots } from '@/hooks/useData';
 import { Hotspot } from '@/lib/types';
+import { getZoneDisplayName } from '@/lib/utils';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ScatterChart, Scatter } from 'recharts';
 
 export const HotspotsPage: React.FC = () => {
@@ -22,7 +23,7 @@ export const HotspotsPage: React.FC = () => {
   };
 
   const scatterData = (hotspots || []).map((h: Hotspot) => ({
-    zone: parseInt(h.zone_id),
+    zone: h.area || h.zone_name || getZoneDisplayName(h.zone_id),
     calls: h.predicted_calls,
     risk: h.risk_score,
     class: h.risk_class,

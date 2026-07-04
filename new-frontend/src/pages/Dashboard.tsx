@@ -1,13 +1,12 @@
-import React, { useEffect } from 'react';
-import { BarChart3, Truck, AlertTriangle, Activity, TrendingUp, Zap, CheckCircle, AlertCircle, RefreshCw, Power } from 'lucide-react';
+import React from 'react';
+import { Truck, AlertTriangle, Activity, TrendingUp, Zap, CheckCircle, AlertCircle, RefreshCw, Power } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/Card';
 import { StatCard } from '@/components/StatCard';
-import { AmbulanceCard } from '@/components/AmbulanceCard';
 import { HotspotCard } from '@/components/HotspotCard';
-import { Alert } from '@/components/Alert';
 import { useAmbulances, useHotspots, useAutoAllocation } from '@/hooks/useData';
 import { useAppStore } from '@/lib/store';
 import { Ambulance, Hotspot } from '@/lib/types';
+import { getZoneDisplayName } from '@/lib/utils';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -23,6 +22,7 @@ export const Dashboard: React.FC = () => {
   const stats = {
     totalAmbulances: ambulances?.length || 0,
     available: ambulances?.filter((a: Ambulance) => a.status?.toUpperCase() === 'AVAILABLE').length || 0,
+    moving: ambulances?.filter((a: Ambulance) => a.status?.toUpperCase() === 'MOVING').length || 0,
     occupied: ambulances?.filter((a: Ambulance) => a.status?.toUpperCase() === 'OCCUPIED').length || 0,
     maintenance: ambulances?.filter((a: Ambulance) => a.status?.toUpperCase() === 'MAINTENANCE').length || 0,
     criticalZones: hotspots?.filter((h: Hotspot) => h.risk_class === 'critical').length || 0,
@@ -41,13 +41,14 @@ export const Dashboard: React.FC = () => {
     .sort((a: Hotspot, b: Hotspot) => b.predicted_calls - a.predicted_calls)
     .slice(0, 5)
     .map((h: Hotspot) => ({
-      zone: `Zone ${h.zone_id}`,
+      zone: h.area || h.zone_name || getZoneDisplayName(h.zone_id),
       calls: h.predicted_calls,
       risk: h.risk_score,
     }));
 
   const statusBreakdown = [
     { status: 'Available', count: stats.available, fill: '#22c55e' },
+    { status: 'Moving', count: stats.moving, fill: '#3b82f6' },
     { status: 'Occupied', count: stats.occupied, fill: '#ef4444' },
     { status: 'Maintenance', count: stats.maintenance, fill: '#64748b' },
   ];
@@ -143,7 +144,7 @@ export const Dashboard: React.FC = () => {
       </Card>
 
       {/* KPI Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         <StatCard 
           title="Total Ambulances" 
           value={stats.totalAmbulances} 
@@ -157,6 +158,13 @@ export const Dashboard: React.FC = () => {
           icon={Activity}
           color="green"
           trend={stats.available > 0 ? 'up' : 'down'}
+        />
+        <StatCard 
+          title="En Route" 
+          value={stats.moving} 
+          icon={Zap}
+          color="blue"
+          trend={stats.moving > 0 ? 'up' : 'down'}
         />
         <StatCard 
           title="Critical Zones" 

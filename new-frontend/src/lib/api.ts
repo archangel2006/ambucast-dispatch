@@ -15,8 +15,9 @@ const apiClient = axios.create({
 // Ambulance APIs
 export const ambulanceAPI = {
   fetchAll: () => apiClient.get('/ambulances'),
+  // Fixed: backend controller expects { id, lat, lng } — not nested location object
   move: (id: string, location: { lat: number; lng: number }) =>
-    apiClient.post('/ambulances/move', { id, location }),
+    apiClient.post('/ambulances/move', { id, lat: location.lat, lng: location.lng }),
   updateStatus: (id: string, status: string) =>
     apiClient.post('/ambulances/status', { id, status }),
   seed: () => apiClient.get('/ambulances/seed'),
@@ -44,8 +45,10 @@ export const mlAPI = {
 };
 
 // Socket.IO connection
+// IMPORTANT: Start with 'polling' first — Render's proxy requires HTTP upgrade handshake
+// before switching to websocket. 'websocket'-only silently drops all connections on Render.
 export const socket = io(SOCKET_URL, {
-  transports: ['websocket'],
+  transports: ['polling', 'websocket'],
   reconnection: true,
   reconnectionDelay: 1000,
   reconnectionDelayMax: 5000,
