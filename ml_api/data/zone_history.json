@@ -1,0 +1,14 @@
+{
+  "Z01": {"rolling_calls_7": 12.5, "lag_24h": 9.0},
+  "Z02": {"rolling_calls_7": 13.2, "lag_24h": 8.4},
+  "Z03": {"rolling_calls_7": 14.0, "lag_24h": 8.8},
+  "Z04": {"rolling_calls_7": 8.1, "lag_24h": 6.9},
+  "Z05": {"rolling_calls_7": 9.5, "lag_24h": 7.1},
+  "Z06": {"rolling_calls_7": 10.9, "lag_24h": 7.8},
+  "Z07": {"rolling_calls_7": 11.7, "lag_24h": 8.0},
+  "Z08": {"rolling_calls_7": 10.3, "lag_24h": 7.4},
+  "Z09": {"rolling_calls_7": 11.2, "lag_24h": 7.6},
+  "Z10": {"rolling_calls_7": 12.8, "lag_24h": 8.3},
+  "Z11": {"rolling_calls_7": 11.9, "lag_24h": 7.9},
+  "Z12": {"rolling_calls_7": 7.8, "lag_24h": 6.6}
+}

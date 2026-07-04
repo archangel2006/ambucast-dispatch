@@ -21,12 +21,17 @@ datasource db {
 // }
 
 model Hotspot {
-  id        String   @id @default(cuid())
-  area      String
-  lat       Float
-  lng       Float
-  risk      String
-  timestamp DateTime
+  id             String   @id @default(cuid())
+  zone_id        String
+  area           String
+  lat            Float
+  lng            Float
+  predicted_calls Int
+  risk_score     Float
+  risk_class     String
+  timestamp      DateTime
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 model Prediction {

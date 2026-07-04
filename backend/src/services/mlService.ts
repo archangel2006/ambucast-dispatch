@@ -19,9 +19,26 @@ interface PredictionResult {
   zone_id: string;
   predicted_calls: number;
   risk_score: number;
-  risk_class: "CRITICAL" | "HIGH" | "MODERATE" | "LOW";
+  risk_class: "critical" | "high" | "medium" | "low";
   reasons: string[];
 }
+
+const normalizeRiskClass = (risk: string | undefined) => {
+  const normalized = String(risk || 'low').trim().toLowerCase();
+  switch (normalized) {
+    case 'critical':
+      return 'critical' as PredictionResult['risk_class'];
+    case 'high':
+      return 'high' as PredictionResult['risk_class'];
+    case 'moderate':
+    case 'medium':
+      return 'medium' as PredictionResult['risk_class'];
+    case 'low':
+      return 'low';
+    default:
+      return 'low';
+  }
+};
 
 export const getPredictions = async (zones: ZoneData[]): Promise<PredictionResult[]> => {
   if (!ML_API_ENABLED) {
@@ -30,7 +47,7 @@ export const getPredictions = async (zones: ZoneData[]): Promise<PredictionResul
       zone_id: z.zone_id,
       predicted_calls: 0,
       risk_score: 0,
-      risk_class: "LOW" as const,
+      risk_class: "low" as const,
       reasons: []
     }));
   }
@@ -56,8 +73,11 @@ export const getPredictions = async (zones: ZoneData[]): Promise<PredictionResul
       throw new Error(`ML API returned ${response.status}`);
     }
 
-    const predictions: PredictionResult[] = await response.json();
-    return predictions;
+    const predictions = (await response.json()) as PredictionResult[];
+    return predictions.map((prediction) => ({
+      ...prediction,
+      risk_class: normalizeRiskClass(prediction.risk_class),
+    }));
 
   } catch (error: any) {
     console.error("ML API failed:", error.message);
@@ -67,7 +87,7 @@ export const getPredictions = async (zones: ZoneData[]): Promise<PredictionResul
       zone_id: z.zone_id,
       predicted_calls: -1,
       risk_score: -1,
-      risk_class: "CRITICAL" as const,
+      risk_class: "low" as const,
       reasons: ["ML API unavailable"]
     }));
   }
@@ -95,8 +115,11 @@ export const getPrediction = async (zone: ZoneData): Promise<PredictionResult> =
       throw new Error(`ML API returned ${response.status}`);
     }
 
-    const prediction: PredictionResult = await response.json();
-    return prediction;
+    const prediction = (await response.json()) as PredictionResult;
+    return {
+      ...prediction,
+      risk_class: normalizeRiskClass(prediction.risk_class),
+    };
 
   } catch (error: any) {
     console.error(`ML API failed for zone ${zone.zone_id}:`, error.message);
@@ -106,7 +129,7 @@ export const getPrediction = async (zone: ZoneData): Promise<PredictionResult> =
       zone_id: zone.zone_id,
       predicted_calls: -1,
       risk_score: -1,
-      risk_class: "CRITICAL",
+      risk_class: "low",
       reasons: ["ML API unavailable"]
     };
   }

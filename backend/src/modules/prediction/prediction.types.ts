@@ -1,11 +1,16 @@
 export interface HotspotInput {
-  area: string;
-  lat: number;
-  lng: number;
-  risk: "low" | "medium" | "high";
+  zone_id: string;
+  area?: string;
+  lat?: number;
+  lng?: number;
+  predicted_calls?: number;
+  risk_score?: number;
+  risk_class?: string;
+  reasons?: string[];
+  timestamp?: string;
 }
 
 export interface PredictionInput {
-  timestamp: string;
+  timestamp?: string;
   hotspots: HotspotInput[];
 }

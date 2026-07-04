@@ -19,7 +19,7 @@ export const updateAmbulanceLocation = async (
     throw new Error("Ambulance not found");
   }
 
-  const updated = prisma.ambulance.update({
+  const updated = await prisma.ambulance.update({
     where: { id },
     data: { lat, lng },
   });
@@ -33,7 +33,7 @@ export const updateAmbulanceStatus = async (
   status: "AVAILABLE" | "BUSY" | "MOVING"
 ) => {
   const io = getIO();
-  const updated = prisma.ambulance.update({
+  const updated = await prisma.ambulance.update({
     where: { id },
     data: { status },
   });
