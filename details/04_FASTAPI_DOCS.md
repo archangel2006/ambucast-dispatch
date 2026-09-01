@@ -34,6 +34,9 @@ ml_api/
    └─ input_schema.py              # Pydantic models (validation)
 ```
 
+<img width="1376" height="768" alt="fastapi" src="https://github.com/user-attachments/assets/1b7baf20-feb3-4db3-afbc-b6ccc4d2c603" />
+
+
 ### Startup Flow
 
 ```python
