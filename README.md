@@ -17,6 +17,7 @@ AmbuCast integrates live weather forecasts, air quality indices, demographic met
 
 ## 📊 System Architecture
 
+
 ```text
 +-----------------------------------------------------------------------------------+
 |                            PRESENTATION LAYER (React SPA)                         |
@@ -64,9 +65,12 @@ AmbuCast integrates live weather forecasts, air quality indices, demographic met
 +-------------------------------------------------------+
 ```
 
+
 1. **HotspotCast (Demand Prediction)**: An **XGBoost Regressor** that predicts the expected volume of emergency calls per zone for the next hour based on weather, air quality index (AQI), day/time, and zone demographics.
 2. **RiskPulse (Risk Engine)**: Evaluates live conditions against clinical risk factors (e.g., AQI > 150, elderly population %) to categorize each zone's risk level (`LOW`, `MODERATE`, `HIGH`, `CRITICAL`).
 3. **FleetOptimizer (Allocation)**: A dispatch solver that matches available/moving ambulances to predicted hotspots using distance matrices and zone priorities.
+
+<img width="1798" height="1005" alt="AMBUCAST" src="https://github.com/user-attachments/assets/4816936a-75f1-471d-aeaa-1d8c909d9336" />
 
 ---
 
