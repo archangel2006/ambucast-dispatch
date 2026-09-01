@@ -29,6 +29,8 @@
 - **Client**: Socket.io client (for frontend, not implemented yet)
 - **Transport**: WebSocket (primary), HTTP long-polling (fallback)
 
+<img width="1376" height="768" alt="websocket" src="https://github.com/user-attachments/assets/e08eb86f-942e-4f23-a990-e15197c982fe" />
+
 ### Backend Implementation
 
 ```typescript
