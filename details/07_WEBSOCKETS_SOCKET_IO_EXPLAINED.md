@@ -88,6 +88,7 @@ Frontend                                    Backend
    (Efficient)
 ```
 
+
 ---
 
 ## 🚑 Why AmbuCast Needs Real-time Updates
@@ -269,6 +270,8 @@ Data:
 - Critical zones: 2
 - Next update in 5 minutes"
 ```
+
+<img width="1376" height="768" alt="webscokets_socketio" src="https://github.com/user-attachments/assets/440824ae-1a3f-44d4-b18f-755b0cc8a8f8" />
 
 ---
 
