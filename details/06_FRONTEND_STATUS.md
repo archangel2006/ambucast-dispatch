@@ -98,6 +98,8 @@ frontend/
 └── package.json                    # Dependencies & scripts
 ```
 
+<img width="1376" height="768" alt="frontend" src="https://github.com/user-attachments/assets/a4f883e6-1c53-494c-b74a-a0478ca3ec01" />
+
 ---
 
 ## 🎨 UI Design Vision
